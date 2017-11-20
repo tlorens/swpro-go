@@ -1,0 +1,43 @@
+{
+	"Name": "Start",
+	"Prompt": "",
+	"Flags": "(S0)",
+	"Commands": [
+		{
+			"key": "~~",
+			"cmd": "CANSI",
+			"name": "Detect ANSI",
+			"param1": "AUTO",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		},
+		{
+			"key": "~~",
+			"cmd": "CLEAR",
+			"name": "Clear Screen",
+			"param1": "",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 1
+		},
+		{
+			"key": "~~",
+			"cmd": "PRINT",
+			"name": "Connect Message",
+			"param1": "ansi/connect.txt",
+			"param2": "AUTO",
+			"flags": "(S0)",
+			"priority": 2
+		},
+		{
+			"key": "~~",
+			"cmd": "@MENU",
+			"name": "Login Maxtrix",
+			"param1": "matrix.mnu",
+			"param2": "AUTO",
+			"flags": "(S0)",
+			"priority": 3
+		}
+	]
+}

@@ -1,0 +1,62 @@
+{
+	"Name": "Matrix",
+	"File": "matrix",
+	"Prompt": "|11>> |03Matrix Login |09(|15?|08/|07Help|09)|14:|07 ",
+	"Flags": "(S0)",
+	"Commands": [
+		{
+			"key": "1",
+			"cmd": "PRINT",
+			"name": "Prelogin",
+			"param1": "ansi/prelogon.ans",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		},
+		{
+			"key": "1",
+			"cmd": "LOGIN",
+			"name": "Login",
+			"param1": "",
+			"param2": "",
+			"flags": "(S25)",
+			"priority": 1
+		},
+		{
+			"key": "1",
+			"cmd": "PRINT",
+			"name": "Welcome",
+			"param1": "ansi/welcome.ans",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 2
+		},
+		{
+			"key": "1",
+			"cmd": "@MENU",
+			"name": "Main Menu",
+			"param1": "main.mnu",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 3
+		},
+		{
+			"key": "?",
+			"cmd": "PRINT",
+			"name": "Matrix Menu",
+			"param1": "ansi/logon.ans",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		},
+		{
+			"key": "6",
+			"cmd": "GDBYE",
+			"name": "Logoff",
+			"param1": "ansi/logon.ans",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		}
+	]
+}

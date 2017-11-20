@@ -1,0 +1,54 @@
+{
+	"Name": "Main Menu",
+	"File": "main",
+	"Prompt": "|03Main Menu |09(|15?|08/|07Help|09)|14:|07 ",
+	"Flags": "(S0)",
+	"Commands": [
+		{
+			"key": "?",
+			"cmd": "PRINT",
+			"name": "Main Menu",
+			"param1": "ansi/main.ans",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		},
+		{
+			"key": "M",
+			"cmd": "MSGS",
+			"name": "Messages",
+			"param1": "",
+			"param2": "",
+			"flags": "(S25)",
+			"priority": 0
+		},
+		{
+			"key": "F",
+			"cmd": "FILES",
+			"name": "Files",
+			"param1": "",
+			"param2": "",
+			"flags": "(S25)",
+			"priority": 0
+		},
+		{
+			"key": "/G",
+			"cmd": "GDBYE",
+			"name": "Quick Logoff",
+			"param1": "",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		},
+		{
+			"key": "G",
+			"cmd": "GDBYE",
+			"name": "Logoff",
+			"param1": "ASK",
+			"param2": "",
+			"flags": "(S0)",
+			"priority": 0
+		}
+	]
+}
+
