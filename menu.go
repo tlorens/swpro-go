@@ -8,21 +8,22 @@ import (
 )
 
 var ranAutos = false
+var menu MenuRec
 
 func LoadMenu(file string) MenuRec {
     menuFile, err := os.Open("menudata/" + file)
     defer menuFile.Close()
 
-    log.Println("LoadMenu: " + file)
+    log.Println("Loading Menu: " + file)
     if err != nil {
         log.Println(err.Error())
     }
 
-    var menu MenuRec
+    var loadedMenu MenuRec
     jsonParser := json.NewDecoder(menuFile)
-    jsonParser.Decode(&menu)
+    jsonParser.Decode(&loadedMenu)
 
-    return menu
+    return loadedMenu
 }
 
 /**
@@ -30,7 +31,7 @@ func LoadMenu(file string) MenuRec {
  */
 func RunAutos(menuCommands []CommandRec) {
     for _, cmd := range menuCommands {
-        if (cmd.Param1 == "AUTO" || cmd.Param2 == "AUTO") {
+        if (Match(cmd.Param1, "AUTO") || Match(cmd.Param2, "AUTO")) {
             ranAutos = true
             log.Println("AUTO: " + cmd.Cmd)
             RunCommand(cmd)
@@ -43,7 +44,7 @@ func RunAutos(menuCommands []CommandRec) {
  */
 func RunEvery(menuCommands []CommandRec) {
     for _, cmd := range menuCommands {
-        if (cmd.Param1 == "EVERY" || cmd.Param2 == "EVERY") {
+        if (Match(cmd.Param1, "EVERY") || Match(cmd.Param2, "EVERY")) {
             log.Println("EVERY: " + cmd.Cmd)
             RunCommand(cmd)
         }
@@ -55,16 +56,16 @@ func RunEvery(menuCommands []CommandRec) {
  * Read a JSON menu and find it's commands.
  * @param file string menu file name.
  */
-func RunMenu() {
+func RunMenu(curMenu string) {
     var tmpMenuFile = ""
-    var menu MenuRec
+    // var menu MenuRec
     // Main loop. Repeat running menus forever.
     for {
-        log.Println("RunMenu: " + CurMenuFile)
+        log.Println("Got Menu: " + curMenu)
 
-        for tmpMenuFile != CurMenuFile {
-            tmpMenuFile = CurMenuFile
-            menu = LoadMenu(CurMenuFile)
+        for tmpMenuFile != curMenu {
+            tmpMenuFile = curMenu
+            menu = LoadMenu(curMenu)
             // Execute 'AUTO' commands.
             if (false == ranAutos) {
                 RunAutos(menu.Commands)
@@ -77,7 +78,7 @@ func RunMenu() {
         ch := Prompt(80, menu.Prompt)
 
         for _, cmd := range menu.Commands {
-            if (strings.ToUpper(cmd.Key) == strings.ToUpper(ch)) {
+            if (Match(cmd.Key, ch)) {
                 RunCommand(cmd)
             }
         }
@@ -92,16 +93,15 @@ func RunCommand(cmd CommandRec) {
     log.Println("RunCmd: " + cmd.Cmd)
 	switch strings.ToUpper(cmd.Cmd) {
         case "CLEAR":
-            Write(ClearScr())
+            NetWrite(ClearScr())
         case "@MENU":
-            PrevMenuFile = CurMenuFile
             ranAutos = false
-            if ("AUTO" != strings.ToUpper(cmd.Param1) && "EVERY" != strings.ToUpper(cmd.Param1)) {
-                CurMenuFile = cmd.Param1
+            if (Match(cmd.Param1, "AUTO") || Match(cmd.Param1, "EVERY")) {
+                menu = LoadMenu(cmd.Param2)
             } else {
-                CurMenuFile = cmd.Param2
+                menu = LoadMenu(cmd.Param1)
             }
-            log.Println("New Menu: " + CurMenuFile)
+            log.Println("New Menu: " + menu.Name)
 		case "PRINT":
             if ("" != cmd.Param1) {
                 PrintFile(cmd.Param1)

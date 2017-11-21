@@ -4,14 +4,13 @@ import (
     "fmt"
     "net"
     "os"
-    "bufio"
     "log"
     "encoding/json"
 )
 
-var CurMenuFile = "start.mnu"
-var PrevMenuFile = ""
 var StringSet struct{}
+var allClients = make(map[string]ClientRec)
+var uniqueId = 0
 
 const (
     CONN_HOST = "192.168.1.3"
@@ -34,6 +33,12 @@ func LoadStrings() {
     log.Println(strings.Sets[0].Strings)
 }
 
+func generateId() string {
+    uniqueId++
+    return fmt.Sprintf("%d", uniqueId)
+}
+
+
 func main() {
 
     LoadStrings()
@@ -55,16 +60,18 @@ func main() {
         }
         // Handle connections in a new goroutine.
         fmt.Printf("Connection from: %s -> %s \n", conn.RemoteAddr(), conn.LocalAddr())
-        Connection = conn
-        go handleRequest(conn)
+        newClient := &ClientRec{conn: conn}
+        go handleRequest(*newClient)
     }
 }
 
 // Handles incoming requests.
-func handleRequest(conn net.Conn) {
-    New(bufio.NewReadWriter(bufio.NewReader(conn), bufio.NewWriter(conn)))
-    CurMenuFile = "start.mnu"
-    RunMenu()
-    conn.Close()
-    fmt.Printf("%s Disconnected\n", conn.RemoteAddr())
+func handleRequest(client ClientRec) {
+    go func(client ClientRec) {
+        NewClient(&client)
+        RunMenu("start.mnu")
+    }(client)
+    // fmt.Printf("Exited RunMenu?")
+    // client.conn.Close()
+    // fmt.Printf("%s Disconnected\n", client.conn.RemoteAddr())
 }

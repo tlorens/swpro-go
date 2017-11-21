@@ -33,8 +33,7 @@ func GetPassword(pword string) bool {
 
 func HitKey() {
 	MCIPrint("|11[|03Hit a key|11]")
-	_ = GetCh()
-	Conn.Flush()
+	_ = NetReadCh()
 }
 
 func LogOff(param1 string, param2 string) {

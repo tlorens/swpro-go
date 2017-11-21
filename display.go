@@ -40,7 +40,7 @@ func MCIPrint(str string) {
     out = strings.Replace(out, "|HK", "", -1)
     out = strings.Replace(out, "|DA", currentTime.Format("01-02-2006"), -1)
     out = strings.Replace(out, "|TI", currentTime.Format("3:4:5 pm"), -1)
-    Write(out)
+    NetWrite(out)
 }
 
 func MCIPrintLn(str string) {
@@ -88,14 +88,8 @@ func PrintFile(filename string) int {
         line, err = freadln(reader)
     }
 
-    Conn.WriteString("\n")
-    Conn.Flush()
+    NetWrite("\n")
     return 1
-}
-
-func GetCh() byte {
-	ch, _ := Conn.ReadByte()
-	return ch
 }
 
 func GetLine(maxLen int) string {
@@ -103,7 +97,7 @@ func GetLine(maxLen int) string {
     var ch byte
 
     for ch != '\n' {
-        ch = GetCh()
+        ch = NetReadCh()
 		if (len(tmp) <= maxLen) {
 			tmp = tmp + string(ch)
 		}
