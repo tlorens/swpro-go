@@ -1,0 +1,28 @@
+{
+  "Sets": [
+    {
+      "Index": 1,
+      "Name": "Basic",
+      "Strings": [
+        {
+          "GetHandle": "|03Enter your Handle/ID#: ",
+          "GetPassword": "|03Enter your password: ",
+          "NewHandle": "|03Enter the Handle you wish to use here: ",
+          "NewPassword": "|03Enter the Password you wish to use here: "
+        }
+      ]
+    },
+    {
+      "Index": 2,
+      "Name": "31337",
+      "Strings": [
+        {
+          "GetHandle": "|03Enter your Handle/ID#: ",
+          "GetPassword": "|03Enter your password: ",
+          "NewHandle": "|03Enter the Handle you wish to use here: ",
+          "NewPassword": "|03Enter the Password you wish to use here: "
+        }
+      ]
+    }
+  ]
+}
