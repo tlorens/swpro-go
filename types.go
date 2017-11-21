@@ -11,7 +11,6 @@ type ClientRec struct {
     conn net.Conn
 }
 
-
 type SystemRec struct {
     SystemName string
     SystemPath string

@@ -9,8 +9,6 @@ import (
 )
 
 var StringSet struct{}
-var allClients = make(map[string]ClientRec)
-var uniqueId = 0
 
 const (
     CONN_HOST = "192.168.1.3"
@@ -33,14 +31,7 @@ func LoadStrings() {
     log.Println(strings.Sets[0].Strings)
 }
 
-func generateId() string {
-    uniqueId++
-    return fmt.Sprintf("%d", uniqueId)
-}
-
-
 func main() {
-
     LoadStrings()
     // Listen for incoming connections.
     listener, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
@@ -60,18 +51,17 @@ func main() {
         }
         // Handle connections in a new goroutine.
         fmt.Printf("Connection from: %s -> %s \n", conn.RemoteAddr(), conn.LocalAddr())
-        newClient := &ClientRec{conn: conn}
-        go handleRequest(*newClient)
+        go handleRequest(conn)
     }
 }
 
 // Handles incoming requests.
-func handleRequest(client ClientRec) {
-    go func(client ClientRec) {
-        NewClient(&client)
-        RunMenu("start.mnu")
-    }(client)
-    // fmt.Printf("Exited RunMenu?")
-    // client.conn.Close()
-    // fmt.Printf("%s Disconnected\n", client.conn.RemoteAddr())
+func handleRequest(conn net.Conn) {
+    c, _ := NewClient(conn)
+    next := c.RunMenu("start.mnu")
+    for {
+        next = c.RunMenu(next)
+    }
+    c.conn.Close()
+    fmt.Printf("%s Disconnected\n", c.conn.RemoteAddr())
 }

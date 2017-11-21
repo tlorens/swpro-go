@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func MCIPrint(str string) {
+func (c *Client) MCIPrint(str string) {
 	currentTime := time.Now()
 	out := str
 	for i := 0; i < len(out); i++ {
@@ -17,7 +17,7 @@ func MCIPrint(str string) {
 			switch cmd {
 				case "HK":
 					out = strings.Replace(out, "|HK", "", -1)
-					HitKey()
+					c.HitKey()
 			}
 		}
 	}
@@ -40,11 +40,11 @@ func MCIPrint(str string) {
     out = strings.Replace(out, "|HK", "", -1)
     out = strings.Replace(out, "|DA", currentTime.Format("01-02-2006"), -1)
     out = strings.Replace(out, "|TI", currentTime.Format("3:4:5 pm"), -1)
-    NetWrite(out)
+    c.NetWrite(out)
 }
 
-func MCIPrintLn(str string) {
-	MCIPrint(str + "\n")
+func (c *Client) MCIPrintLn(str string) {
+	c.MCIPrint(str + "\n")
 }
 
 /**
@@ -71,7 +71,7 @@ func freadln(r *bufio.Reader) (string, error) {
  *  Print a file to the screen.
  *
  */
-func PrintFile(filename string) int {
+func (c *Client) PrintFile(filename string) int {
     fh, err := os.Open(filename)
 
     if err != nil {
@@ -84,20 +84,20 @@ func PrintFile(filename string) int {
     line, err := freadln(reader)
 
     for err == nil {
-        MCIPrint(line)
+        c.MCIPrint(line)
         line, err = freadln(reader)
     }
 
-    NetWrite("\n")
+    c.NetWrite("\n")
     return 1
 }
 
-func GetLine(maxLen int) string {
+func (c *Client) GetLine(maxLen int) string {
     var tmp string
     var ch byte
 
     for ch != '\n' {
-        ch = NetReadCh()
+        ch = c.NetReadCh()
 		if (len(tmp) <= maxLen) {
 			tmp = tmp + string(ch)
 		}
@@ -106,7 +106,7 @@ func GetLine(maxLen int) string {
 	return tmp
 }
 
-func Prompt(maxLen int, prompt string) string {
-	MCIPrint(prompt)
-	return strings.TrimRight(strings.TrimSpace(GetLine(maxLen)), "\n")
+func (c *Client) Prompt(maxLen int, prompt string) string {
+	c.MCIPrint(prompt)
+	return strings.TrimRight(strings.TrimSpace(c.GetLine(maxLen)), "\n")
 }

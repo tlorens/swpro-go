@@ -23,22 +23,22 @@ func MatchRaw(str1 string, str2 string) bool {
 }
 
 
-func GetPassword(pword string) bool {
-	password := Prompt(80, "Password: ")
+func (c *Client) GetPassword(pword string) bool {
+	password := c.Prompt(80, "Password: ")
 	if (MatchRaw(pword, password)) {
 		return true
 	}
 	return false
 }
 
-func HitKey() {
-	MCIPrint("|11[|03Hit a key|11]")
-	_ = NetReadCh()
+func (c *Client) HitKey() {
+	c.MCIPrint("|11[|03Hit a key|11]")
+	_ = c.NetReadCh()
 }
 
-func LogOff(param1 string, param2 string) {
+func (c *Client) LogOff(param1 string, param2 string) {
 	if ("ASK" == param1 || "ASK" == param2) {
 
 	}
-	Disconnect()
+	c.Disconnect()
 }

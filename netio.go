@@ -2,33 +2,37 @@ package main
 
 import (
     "bufio"
+    "net"
 )
 
-var (
-    rwIO *bufio.ReadWriter
-    client *ClientRec
-)
-
-func NewClient(cli *ClientRec) {
-    client = cli
-    rwIO = bufio.NewReadWriter(bufio.NewReader(cli.conn), bufio.NewWriter(cli.conn))
+type Client struct {
+    conn net.Conn
+    rw *bufio.ReadWriter
 }
 
-func NetWrite(str string) {
-    rwIO.WriteString(str)
-    rwIO.Flush()
+func NewClient(c net.Conn) (*Client, error) {
+    rwIO := bufio.NewReadWriter(bufio.NewReader(c), bufio.NewWriter(c))
+    return &Client{
+        conn: c,
+        rw: rwIO,
+    }, nil
 }
 
-func NetWriteln(str string) {
-    rwIO.WriteString(str + "\n")
-    rwIO.Flush()
+func (c *Client) NetWrite(str string) {
+    c.rw.WriteString(str)
+    c.rw.Flush()
 }
 
-func NetReadCh() byte {
-    ch, _ := rwIO.ReadByte()
+func (c *Client) NetWriteln(str string) {
+    c.rw.WriteString(str + "\n")
+    c.rw.Flush()
+}
+
+func (c *Client) NetReadCh() byte {
+    ch, _ := c.rw.ReadByte()
     return ch
 }
 
-func Disconnect() {
-	client.conn.Close()
+func (c *Client) Disconnect() {
+    c.conn.Close()
 }
