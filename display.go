@@ -107,6 +107,7 @@ func (c *Client) GetLine(maxLen int) string {
 }
 
 func (c *Client) Prompt(maxLen int, prompt string) string {
+    log.Printf("Menu Prompt" + prompt)
 	c.MCIPrint(prompt)
 	return strings.TrimRight(strings.TrimSpace(c.GetLine(maxLen)), "\n")
 }

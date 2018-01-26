@@ -16,7 +16,7 @@
 			"key": "~~",
 			"cmd": "CLEAR",
 			"name": "Clear Screen",
-			"param1": "",
+			"param1": "AUTO",
 			"param2": "",
 			"flags": "(S0)",
 			"priority": 1

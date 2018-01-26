@@ -58,10 +58,8 @@ func main() {
 // Handles incoming requests.
 func handleRequest(conn net.Conn) {
     c, _ := NewClient(conn)
-    next := c.RunMenu("start.mnu")
-    for {
-        next = c.RunMenu(next)
-    }
+    c.SetMenu("start.mnu")
+    c.RunMenu()
     c.conn.Close()
     fmt.Printf("%s Disconnected\n", c.conn.RemoteAddr())
 }

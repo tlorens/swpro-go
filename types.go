@@ -1,15 +1,6 @@
 package main
 
-import (
-    "net"
-)
-
-var AllClients map[*ClientRec] int
-
-type ClientRec struct {
-    id string
-    conn net.Conn
-}
+var AllClients map[*Client] int
 
 type SystemRec struct {
     SystemName string

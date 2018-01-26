@@ -1,32 +1,32 @@
 {
-	"Name": "Main Menu",
-	"File": "main",
-	"Prompt": "|03Main Menu |09(|15?|08/|07Help|09)|14:|07 ",
+	"Name": "Message Menu",
+	"File": "msgs",
+	"Prompt": "|03Messages Menu |09(|15?|08/|07Help|09)|14:|07 ",
 	"Flags": "(S0)",
 	"Commands": [
 		{
 			"key": "?",
 			"cmd": "PRINT",
-			"name": "Main Menu",
-			"param1": "ansi/main.ans",
+			"name": "Message Menu",
+			"param1": "ansi/msg.ans",
 			"param2": "",
 			"flags": "(S0)",
 			"priority": 0
 		},
 		{
-			"key": "M",
+			"key": "Q",
 			"cmd": "@MENU",
-			"name": "Messages",
-			"param1": "msg.mnu",
+			"name": "Main",
+			"param1": "main.mnu",
 			"param2": "",
 			"flags": "(S25)",
 			"priority": 0
 		},
 		{
 			"key": "F",
-			"cmd": "FILES",
+			"cmd": "@MENU",
 			"name": "Files",
-			"param1": "",
+			"param1": "xfers.mnu",
 			"param2": "",
 			"flags": "(S25)",
 			"priority": 0

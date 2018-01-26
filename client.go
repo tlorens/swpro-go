@@ -8,6 +8,9 @@ import (
 type Client struct {
     conn net.Conn
     rw *bufio.ReadWriter
+    curMenu string
+    preMenu string
+    ranAutos bool
 }
 
 func NewClient(c net.Conn) (*Client, error) {
@@ -15,7 +18,17 @@ func NewClient(c net.Conn) (*Client, error) {
     return &Client{
         conn: c,
         rw: rwIO,
+        curMenu: "start.mnu",
+        ranAutos: false,
     }, nil
+}
+
+func (c *Client) SetMenu(str string) {
+    c.curMenu = str
+}
+
+func (c *Client) GetMenu() string {
+    return c.curMenu
 }
 
 func (c *Client) NetWrite(str string) {

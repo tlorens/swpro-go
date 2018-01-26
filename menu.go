@@ -7,10 +7,9 @@ import (
     "encoding/json"
 )
 
-var ranAutos = false
 var menu MenuRec
 
-func LoadMenu(file string) MenuRec {
+func loadMenu(file string) MenuRec {
     menuFile, err := os.Open("menudata/" + file)
     defer menuFile.Close()
 
@@ -26,14 +25,31 @@ func LoadMenu(file string) MenuRec {
     return loadedMenu
 }
 
+func (c *Client) RunMenu() {
+    for {
+        menu := loadMenu(c.curMenu)
+        if (!c.ranAutos) {
+            c.RunAutos(menu.Commands)
+        }
+        menu = loadMenu(c.curMenu)
+
+        ch := c.Prompt(80, menu.Prompt)
+
+        for _, cmd := range menu.Commands {
+            if (Match(cmd.Key, ch)) {
+                c.RunCommand(cmd)
+            }
+        }
+    }
+}
+
 /**
  * Execute commands tagged with AUTO to run ONCE automatically before the menut prompt
  */
 func (c *Client) RunAutos(menuCommands []CommandRec) {
     for _, cmd := range menuCommands {
         if (Match(cmd.Param1, "AUTO") || Match(cmd.Param2, "AUTO")) {
-            ranAutos = true
-            log.Println("AUTO: " + cmd.Cmd)
+            log.Println("Running Auto: " + cmd.Name)
             c.RunCommand(cmd)
         }
     }
@@ -43,66 +59,31 @@ func (c *Client) RunAutos(menuCommands []CommandRec) {
  * Execute commands tagged with 'EVERY' at every prompt. ]
  */
 func (c *Client) RunEvery(menuCommands []CommandRec) {
-    for _, cmd := range menuCommands {
-        if (Match(cmd.Param1, "EVERY") || Match(cmd.Param2, "EVERY")) {
-            log.Println("EVERY: " + cmd.Cmd)
-            c.RunCommand(cmd)
-        }
-    }
+    // var curMenu = ""
+    // for _, cmd := range menuCommands {
+    //     if (Match(cmd.Param1, "EVERY") || Match(cmd.Param2, "EVERY")) {
+    //         log.Println("EVERY: " + cmd.Cmd)
+    //         curMenu = c.RunCommand(cmd)
+    //     }
+    // }
 }
 
-
-/**
- * Read a JSON menu and find it's commands.
- * @param file string menu file name.
- */
-func (c *Client) RunMenu(curMenu string) string {
-    var tmpMenuFile = ""
-    // var menu MenuRec
-    // Main loop. Repeat running menus forever.
-
-    log.Println("Got Menu: " + curMenu)
-
-    for tmpMenuFile != curMenu {
-        tmpMenuFile = curMenu
-        menu = LoadMenu(curMenu)
-        // Execute 'AUTO' commands.
-        if (false == ranAutos) {
-            c.RunAutos(menu.Commands)
-        }
-    }
-
-    // Execute 'EVERY' commands.
-    c.RunEvery(menu.Commands)
-
-    ch := c.Prompt(80, menu.Prompt)
-
-    for _, cmd := range menu.Commands {
-        if (Match(cmd.Key, ch)) {
-            curMenu = c.RunCommand(cmd)
-        }
-    }
-
-    return curMenu
-}
 
 /**
  * Execute a nenus command.
  * @param cmd CommandRec Command to execute.
  */
-func (c *Client) RunCommand(cmd CommandRec) string {
-    log.Println("RunCmd: " + cmd.Cmd)
+func (c *Client) RunCommand(cmd CommandRec) {
+    log.Println("Running Command: " + cmd.Cmd)
 	switch strings.ToUpper(cmd.Cmd) {
         case "CLEAR":
             c.NetWrite(ClearScr())
         case "@MENU":
-            ranAutos = false
             if (Match(cmd.Param1, "AUTO") || Match(cmd.Param1, "EVERY")) {
-                return cmd.Param2
+                c.SetMenu(cmd.Param2)
             } else {
-                return cmd.Param1
+                c.SetMenu(cmd.Param1)
             }
-            log.Println("New Menu: " + menu.Name)
 		case "PRINT":
             if ("" != cmd.Param1) {
                 c.PrintFile(cmd.Param1)
@@ -113,8 +94,5 @@ func (c *Client) RunCommand(cmd CommandRec) string {
             c.MatrixLogin()
         case "GDBYE":
             c.LogOff(cmd.Param1, cmd.Param2)
-		default:
-            return ""
 	}
-    return ""
 }
