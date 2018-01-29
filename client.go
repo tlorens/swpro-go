@@ -11,6 +11,7 @@ type Client struct {
     curMenu string
     preMenu string
     ranAutos bool
+    useEcho bool
 }
 
 func NewClient(c net.Conn) (*Client, error) {
@@ -20,6 +21,7 @@ func NewClient(c net.Conn) (*Client, error) {
         rw: rwIO,
         curMenu: "start.mnu",
         ranAutos: false,
+        useEcho: true,
     }, nil
 }
 
@@ -45,6 +47,16 @@ func (c *Client) NetReadCh() byte {
     ch, _ := c.rw.ReadByte()
     return ch
 }
+
+// func (c *Client) HotKey() byte {
+//     ch, _ := c.rw.ReadString("\w")
+//     return ch
+// }
+
+func (c *Client) Discard() {
+    c.rw.Discard(1)
+}
+
 
 func (c *Client) Disconnect() {
     c.conn.Close()

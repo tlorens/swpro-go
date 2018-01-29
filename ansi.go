@@ -71,8 +71,8 @@ func ClearScr() string {
  *	Clears entire line.
  *
  */
-func ClearLine() {
-	clearline(2)
+func ClearLine() string {
+	return clearline(2)
 }
 
 /**

@@ -49,7 +49,7 @@ func (c *Client) RunMenu() {
 func (c *Client) RunAutos(menuCommands []CommandRec) {
     for _, cmd := range menuCommands {
         if (Match(cmd.Param1, "AUTO") || Match(cmd.Param2, "AUTO")) {
-            log.Println("Running Auto: " + cmd.Name)
+            log.Println("Auto: " + cmd.Name + " :: (" + cmd.Param1 + ") (" + cmd.Param2 + ")")
             c.RunCommand(cmd)
         }
     }
@@ -76,6 +76,8 @@ func (c *Client) RunEvery(menuCommands []CommandRec) {
 func (c *Client) RunCommand(cmd CommandRec) {
     log.Println("Running Command: " + cmd.Cmd)
 	switch strings.ToUpper(cmd.Cmd) {
+        case "ECHO":
+            c.SetEcho()
         case "CLEAR":
             c.NetWrite(ClearScr())
         case "@MENU":
@@ -86,8 +88,10 @@ func (c *Client) RunCommand(cmd CommandRec) {
             }
 		case "PRINT":
             if ("" != cmd.Param1) {
+                log.Println("::" + cmd.Param1)
                 c.PrintFile(cmd.Param1)
             } else if ("" != cmd.Param2) {
+                log.Println("::" + cmd.Param2)
                 c.PrintFile(cmd.Param2)
             }
         case "LOGIN":
