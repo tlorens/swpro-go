@@ -3,6 +3,8 @@ package main
 import (
     "bufio"
     "net"
+    "log"
+    "runtime"
 )
 
 type Client struct {
@@ -44,7 +46,13 @@ func (c *Client) NetWriteln(str string) {
 }
 
 func (c *Client) NetReadCh() byte {
-    ch, _ := c.rw.ReadByte()
+    ch, err := c.rw.ReadByte()
+    if err != nil {
+        log.Println("Error:", err.Error())
+        c.conn.Close()
+        runtime.Goexit()
+    }
+
     return ch
 }
 

@@ -71,27 +71,44 @@ func freadln(r *bufio.Reader) (string, error) {
  *  Print a file to the screen.
  *
  */
-func (c *Client) PrintFile(filename string) int {
+// func (c *Client) oldPrintFile(filename string) {
+//     fh, err := os.Open(filename)
+
+//     if err != nil {
+//         log.Printf("error opening file: %v\n",err)
+//     }
+
+//     reader := bufio.NewReader(fh)
+//     line, err := freadln(reader)
+
+//     for err == nil {
+//         c.MCIPrint(line)
+//         line, err = freadln(reader)
+//     }
+
+//     c.NetWrite("\n\r")
+// }
+
+/**
+ *
+ *  Print a file to the screen.
+ *
+ */
+func (c *Client) PrintFile(filename string) {
     fh, err := os.Open(filename)
 
     if err != nil {
-        log.Printf("error opening file: %v\n",err)
-        return -1
+        log.Printf("Error opening file: %v\n",err)
     }
 
-    reader := bufio.NewReader(fh)
-
-    line, err := freadln(reader)
-
-    for err == nil {
-        c.MCIPrint(line)
-        line, err = freadln(reader)
+    scanner := bufio.NewScanner(fh)
+    for scanner.Scan() {
+        line := scanner.Text()
+        c.MCIPrintLn(line)
     }
-
-    c.NetWrite("\n\r")
-    c.NetWrite("\n\r")
-    return 1
+    c.NetWrite("\n")
 }
+
 
 func (c *Client) GetLine(maxLen int) string {
     var tmp string

@@ -34,7 +34,7 @@ func (c *Client) GetPassword(pword string) bool {
 func (c *Client) HitKey() {
 	c.MCIPrint("|11[|03Hit a key|11]")
 	_ = c.NetReadCh()
-	// c.Discard()
+	c.Discard()
 	c.MCIPrint(ClearLine())
 }
 

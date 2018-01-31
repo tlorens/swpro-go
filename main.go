@@ -5,6 +5,7 @@ import (
     "net"
     "os"
     "log"
+    "runtime"
     "encoding/json"
 )
 
@@ -34,6 +35,8 @@ func LoadStrings() {
 func main() {
     LoadStrings()
     // Listen for incoming connections.
+    maxConns := int(float64(runtime.NumCPU()) * 1.25)
+    runtime.GOMAXPROCS(maxConns)
     listener, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
     if err != nil {
         fmt.Println("Error listening:", err.Error())
@@ -41,7 +44,7 @@ func main() {
     }
     // Close the listener when the application closes.
     defer listener.Close()
-    fmt.Println("Listening on " + CONN_HOST + ":" + CONN_PORT)
+    fmt.Printf("Listening on %s:%s (%d)\n", CONN_HOST, CONN_PORT, maxConns)
     for {
         // Listen for an incoming connection.
         conn, err := listener.Accept()
@@ -55,8 +58,14 @@ func main() {
     }
 }
 
+func hangup(conn net.Conn) {
+    conn.Close()
+    fmt.Printf("%s Disconnected\n", conn.RemoteAddr())
+}
+
 // Handles incoming requests.
 func handleRequest(conn net.Conn) {
+    defer hangup(conn)
     c, _ := NewClient(conn)
     c.SetMenu("start.mnu")
     c.RunMenu()
