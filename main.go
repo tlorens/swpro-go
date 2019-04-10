@@ -91,11 +91,9 @@ func handleRequest(conn net.Conn) {
     c, _ := NewClient(conn)
 
     c.InitClient()
-    in := c.Prompt(30, "Input 1: ")
-    fmt.Printf("[%s]\n", in)
 
-    in = c.Prompt(30, "Input 2: ")
-    fmt.Printf("[%s]\n", in)
+    ch := c.KeyPrompt("HotKey: ")
+    fmt.Printf("[%s]\n", ch)
 
 
     // c.SetMenu("start.mnu")

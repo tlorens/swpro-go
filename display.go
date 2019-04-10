@@ -116,18 +116,35 @@ func (c *Client) GetLine(maxLen int) string {
     var tmp string
     var ch byte
 
-    for ch != 13 {
+   for ch != 13 {
         ch = c.NetReadCh()
 		if (len(tmp) <= maxLen) {
 			tmp = tmp + string(ch)
             c.NetWrite(string(ch))
 		}
 	}
-
+    c.NetWrite("\n")
 	return tmp
 }
 
 func (c *Client) Prompt(maxLen int, prompt string) string {
 	c.MCIPrint(prompt)
 	return strings.TrimRight(strings.TrimSpace(c.GetLine(maxLen)), "\n")
+}
+
+func (c *Client) KeyPrompt(prompt string) string {
+	var ch byte
+
+	c.MCIPrint(prompt)
+
+    for {
+		ch = c.NetReadCh()
+		if ch > 31 && ch < 255 {
+			break;
+		}
+	}
+   
+	c.NetWriteln(string(ch))
+
+	return string(ch)
 }

@@ -5,7 +5,7 @@ import (
     "net"
     "log"
     "runtime"
-    "fmt"
+//    "fmt"
 )
 
 type Client struct {
@@ -30,7 +30,9 @@ func NewClient(c net.Conn) (*Client, error) {
 
 func (c *Client) InitClient() {
     c.rw.Write([]byte{cmdIAC, cmdWill, optEcho, cmdIAC, cmdWill, optSuppressGoAhead, cmdIAC, cmdWont, cmdLineMode, cmdIAC, cmdWill, optEcho})
-    //c.rw.Write([]byte{cmdIAC, cmdDo, cmdLineMode, cmdIAC, cmdSB, cmdLineMode, cmdMode, 0, cmdIAC, cmdSE, cmdIAC, cmdWill, optEcho})
+    c.rw.Flush()
+    c.rw.Discard(5)
+    //c.rw.WriteString("\e[8;25;80t")
 }
 
 func (c *Client) SetMenu(str string) {
@@ -47,7 +49,7 @@ func (c *Client) NetWrite(str string) {
 }
 
 func (c *Client) NetWriteln(str string) {
-    c.rw.WriteString(str + "\n")
+    c.rw.WriteString(str + "\n\r")
     c.rw.Flush()
 }
 
@@ -59,14 +61,12 @@ func (c *Client) NetReadCh() byte {
         runtime.Goexit()
     }
 
-    fmt.Printf("%c", ch)
     return ch
 }
 
-// func (c *Client) HotKey() byte {
-//     ch, _ := c.rw.ReadString("\w")
-//     return ch
-// }
+func (c *Client) HotKey() byte {
+     return c.NetReadCh()
+}
 
 func (c *Client) Discard() {
     c.rw.Discard(1)
