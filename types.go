@@ -1,18 +1,5 @@
 package main
 
-var AllClients map[*Client] int
-
-type SystemRec struct {
-    SystemName string
-    SystemPath string
-    MenuPath string
-    AnsiPath string
-    DataPath string
-    StartMenu string
-    ListenPort string
-    ListenAddr string
-}
-
 type MenuRec struct {
     Name string
     Prompt string

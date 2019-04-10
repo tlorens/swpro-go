@@ -5,6 +5,7 @@ import (
     "net"
     "log"
     "runtime"
+    "fmt"
 )
 
 type Client struct {
@@ -25,6 +26,11 @@ func NewClient(c net.Conn) (*Client, error) {
         ranAutos: false,
         useEcho: true,
     }, nil
+}
+
+func (c *Client) InitClient() {
+    c.rw.Write([]byte{cmdIAC, cmdWill, optEcho, cmdIAC, cmdWill, optSuppressGoAhead, cmdIAC, cmdWont, cmdLineMode, cmdIAC, cmdWill, optEcho})
+    //c.rw.Write([]byte{cmdIAC, cmdDo, cmdLineMode, cmdIAC, cmdSB, cmdLineMode, cmdMode, 0, cmdIAC, cmdSE, cmdIAC, cmdWill, optEcho})
 }
 
 func (c *Client) SetMenu(str string) {
@@ -53,6 +59,7 @@ func (c *Client) NetReadCh() byte {
         runtime.Goexit()
     }
 
+    fmt.Printf("%c", ch)
     return ch
 }
 

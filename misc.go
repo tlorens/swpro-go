@@ -55,7 +55,7 @@ func (c *Client) YesNo(prompt string, def bool) bool {
 }
 
 func (c *Client) SetEcho() {
-	useEcho := c.Prompt(3, "|11Enable echo |03(|15Y|08/|15n|03)|08: ")
+	useEcho := c.Prompt(3, "|11Enable echo |03(|15y|08/|15N|03)|08: ")
 	if (strings.ToUpper(useEcho) == "Y") {
 		c.MCIPrintLn("|15ECHO set: TRUE|CR|HK")
 		c.useEcho = true
