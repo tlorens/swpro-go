@@ -92,12 +92,9 @@ func handleRequest(conn net.Conn) {
 
     c.InitClient()
 
-    ch := c.KeyPrompt("HotKey: ")
-    fmt.Printf("[%s]\n", ch)
 
-
-    // c.SetMenu("start.mnu")
-    // c.RunMenu()
-    // c.conn.Close()
-    // fmt.Printf("%s Disconnected\n", c.conn.RemoteAddr())
+    c.SetMenu("start.mnu")
+    c.RunMenu()
+    c.conn.Close()
+    fmt.Printf("%s Disconnected\n", c.conn.RemoteAddr())
 }

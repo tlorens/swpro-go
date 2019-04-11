@@ -1,31 +1,28 @@
 package main
 
 import (
+	"log"
 	"strings"
 )
 
 func Match(str1 string, str2 string) bool {
-	if (len(strings.Trim(str1, " ")) == len(strings.Trim(str2, " "))) {
-		if (0 == strings.Compare(strings.ToUpper(str1), strings.ToUpper(str2))) {
-			return true;
-		}
-	}
-	return false;
+	log.Println(len(str1))
+	log.Println(len(str2))
+	return strings.EqualFold(str1, str2)
 }
 
 func MatchRaw(str1 string, str2 string) bool {
-	if (len(strings.Trim(str1, " ")) == len(strings.Trim(str2, " "))) {
-		if (0 == strings.Compare(str1, str2)) {
-			return true;
+	if len(strings.Trim(str1, " ")) == len(strings.Trim(str2, " ")) {
+		if 0 == strings.Compare(str1, str2) {
+			return true
 		}
 	}
-	return false;
+	return false
 }
-
 
 func (c *Client) GetPassword(pword string) bool {
 	password := c.Prompt(80, "Password: ")
-	if (MatchRaw(pword, password)) {
+	if MatchRaw(pword, password) {
 		return true
 	}
 	return false
@@ -39,7 +36,7 @@ func (c *Client) HitKey() {
 }
 
 func (c *Client) LogOff(param1 string, param2 string) {
-	if ("ASK" == param1 || "ASK" == param2) {
+	if "ASK" == param1 || "ASK" == param2 {
 
 	}
 	c.Disconnect()
@@ -48,7 +45,7 @@ func (c *Client) LogOff(param1 string, param2 string) {
 func (c *Client) YesNo(prompt string, def bool) bool {
 	c.MCIPrint(prompt)
 	var input = strings.TrimRight(strings.TrimSpace(c.GetLine(3)), "\n")
-	if (strings.Trim(strings.ToUpper(input), "\n") == "Y") {
+	if strings.Trim(strings.ToUpper(input), "\n") == "Y" {
 		return true
 	}
 	return false
@@ -56,7 +53,7 @@ func (c *Client) YesNo(prompt string, def bool) bool {
 
 func (c *Client) SetEcho() {
 	useEcho := c.Prompt(3, "|11Enable echo |03(|15y|08/|15N|03)|08: ")
-	if (strings.ToUpper(useEcho) == "Y") {
+	if strings.ToUpper(useEcho) == "Y" {
 		c.MCIPrintLn("|15ECHO set: TRUE|CR|HK")
 		c.useEcho = true
 	}
