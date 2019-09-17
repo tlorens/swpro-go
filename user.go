@@ -2,8 +2,9 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func openUserFile() {
@@ -14,8 +15,6 @@ func openUserFile() {
 	defer db.Close()
 }
 
-
 func ValidUserName(handle string) bool {
 	return true
 }
-

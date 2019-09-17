@@ -1,28 +1,23 @@
 {
-  "Sets": [
-    {
-      "Index": 1,
-      "Name": "Basic",
-      "Strings": [
+    "languageSets": [{
+            "index": 1,
+            "name": "Default",
+            "strings": [{
+                "getHandle": "|03Enter your Handle/ID#: ",
+                "getPassword": "|03Enter your password: ",
+                "newHandle": "|03Enter the Handle you wish to use here: ",
+                "newPassword": "|03Enter the Password you wish to use here: "
+            }]
+        },
         {
-          "GetHandle": "|03Enter your Handle/ID#: ",
-          "GetPassword": "|03Enter your password: ",
-          "NewHandle": "|03Enter the Handle you wish to use here: ",
-          "NewPassword": "|03Enter the Password you wish to use here: "
+            "index": 2,
+            "name": "Cyberpunk",
+            "strings": [{
+                "getHandle": "|12<01> Decker ID:> ",
+                "getPassword": "|12<02> Passcode:> ",
+                "newHandle": "|03Enter the Handle you wish to use here: ",
+                "newPassword": "|03Enter the Password you wish to use here: "
+            }]
         }
-      ]
-    },
-    {
-      "Index": 2,
-      "Name": "31337",
-      "Strings": [
-        {
-          "GetHandle": "|03Enter your Handle/ID#: ",
-          "GetPassword": "|03Enter your password: ",
-          "NewHandle": "|03Enter the Handle you wish to use here: ",
-          "NewPassword": "|03Enter the Password you wish to use here: "
-        }
-      ]
-    }
-  ]
+    ]
 }

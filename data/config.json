@@ -1,8 +1,7 @@
 {
-	"systemName": "Cyberdyne Systems",
-	"startMenu": "start.mnu",
 	"bindIP": "192.168.1.3",
 	"bindPort": 9000,
-	"sysOp": "iCE Breaker"
+	"systemName": "Cyberdyne Systems",
+	"sysOp": "iCE Breaker",
+	"startMenu": "start.mnu"
 }
-

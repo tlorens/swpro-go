@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+// MCIPrint parses 'message control instructions'
+// displays the string to the console.
 func (c *Client) MCIPrint(str string) {
 	currentTime := time.Now()
 	out := str
@@ -43,58 +45,12 @@ func (c *Client) MCIPrint(str string) {
 	c.NetWrite(out)
 }
 
+// MCIPrintLn will display a 'message control instruction' to the screen.
 func (c *Client) MCIPrintLn(str string) {
 	c.MCIPrint(str + "\n")
 }
 
-/**
- *
- *  Private method to read strings from files.
- *
- */
-func freadln(r *bufio.Reader) (string, error) {
-	var (
-		isPrefix bool  = true
-		err      error = nil
-		line, ln []byte
-	)
-
-	for isPrefix && err == nil {
-		line, isPrefix, err = r.ReadLine()
-		ln = append(ln, line...)
-	}
-
-	return string(ln), err
-}
-
-/**
- *
- *  Print a file to the screen.
- *
- */
-// func (c *Client) oldPrintFile(filename string) {
-//     fh, err := os.Open(filename)
-
-//     if err != nil {
-//         log.Printf("error opening file: %v\n",err)
-//     }
-
-//     reader := bufio.NewReader(fh)
-//     line, err := freadln(reader)
-
-//     for err == nil {
-//         c.MCIPrint(line)
-//         line, err = freadln(reader)
-//     }
-
-//     c.NetWrite("\n\r")
-// }
-
-/**
- *
- *  Print a file to the screen.
- *
- */
+// PrintFile will display a file to the screen.
 func (c *Client) PrintFile(filename string) {
 	fh, err := os.Open(filename)
 

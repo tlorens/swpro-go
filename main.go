@@ -1,31 +1,34 @@
+// ShockWave PRO BBS.
+// Author: Timothy Lorens (tlorens@cyberdyne.org)
+
 package main
 
 import (
-    "strconv"
-    "flag"
-    "fmt"
-    "net"
-    "os"
-    "runtime"
+	"flag"
+	"fmt"
+	"net"
+	"os"
+	"runtime"
+	"strconv"
 )
 
 const (
-    CONN_HOST = "0.0.0.0"
-    CONN_TYPE = "tcp"
-    CONN_PORT = 9000
+	CONN_HOST = "0.0.0.0"
+	CONN_TYPE = "tcp"
+	CONN_PORT = 9000
 )
 
 const (
-	CR  = byte('\r')
-	LF  = byte('\n')
+	CR = byte('\r')
+	LF = byte('\n')
 )
 
 const (
-	cmdMode       = 1
-	cmdLineMode   = 34
-	cmdSE         = 240
-	cmdNOP        = 241
-	cmdData       = 242
+	cmdMode     = 1
+	cmdLineMode = 34
+	cmdSE       = 240
+	cmdNOP      = 241
+	cmdData     = 242
 
 	cmdBreak = 243
 	cmdGA    = 249
@@ -44,57 +47,60 @@ const (
 	optSuppressGoAhead = 3
 )
 
+var config ConfigRec
+
 func main() {
-    fmt.Print("\033[H\033[2J")
-    fmt.Println("-=] ShockWavE:PRO BBS ]=-")
+	config := loadConfig("config.json")
+	// ClrScr()
+	Writeln("-=] ShockWavE:PRO BBS ]=-")
+	Writeln("System: " + config.SystemName)
 
-    // Command line argument -port
-    portPtr := flag.Int("port", CONN_PORT, "Port number")
-    flag.Parse()
+	// Command line argument -port
+	portPtr := flag.Int("port", CONN_PORT, "Port number")
+	flag.Parse()
 
-    // Only accept so many connections.
-    maxConns := int(float64(runtime.NumCPU()) * 1.25)
-    runtime.GOMAXPROCS(maxConns)
+	// Only accept so many connections.
+	maxConns := int(float64(runtime.NumCPU()) * 1.25)
+	runtime.GOMAXPROCS(maxConns)
 
-    // Listen for incoming connections.
-    listener, err := net.Listen(CONN_TYPE, CONN_HOST + ":" + strconv.Itoa(*portPtr))
-    if err != nil {
-        fmt.Println("Error: ", err.Error())
-        os.Exit(1)
-    }
+	// Listen for incoming connections.
+	listener, err := net.Listen(CONN_TYPE, CONN_HOST+":"+strconv.Itoa(*portPtr))
+	if err != nil {
+		fmt.Println("Error: ", err.Error())
+		os.Exit(1)
+	}
 
-    // Close the listener when the application closes.
-    defer listener.Close()
+	// Close the listener when the application closes.
+	defer listener.Close()
 
-    fmt.Printf("Listening on %s:%s (max: %d)\n", CONN_HOST, strconv.Itoa(*portPtr), maxConns)
-    for {
-        // Listen for an incoming connection.
-        conn, err := listener.Accept()
-        if err != nil {
-            fmt.Println("Error accepting: ", err.Error())
-            os.Exit(1)
-        }
-        // Handle connections in a new goroutine.
-        fmt.Printf("Connection from: %s -> %s \n", conn.RemoteAddr(), conn.LocalAddr())
-        go handleRequest(conn)
-    }
+	fmt.Printf("Listening on %s:%s (max: %d)\n", CONN_HOST, strconv.Itoa(*portPtr), maxConns)
+	for {
+		// Listen for an incoming connection.
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println("Error accepting: ", err.Error())
+			os.Exit(1)
+		}
+		// Handle connections in a new goroutine.
+		fmt.Printf("Connection from: %s -> %s \n", conn.RemoteAddr(), conn.LocalAddr())
+		go handleRequest(conn)
+	}
 }
 
 func hangup(conn net.Conn) {
-    conn.Close()
-    fmt.Printf("%s Disconnected\n", conn.RemoteAddr())
+	conn.Close()
+	fmt.Printf("%s Disconnected\n", conn.RemoteAddr())
 }
 
 // Handles incoming requests.
 func handleRequest(conn net.Conn) {
-    // defer hangup(conn)
-    c, _ := NewClient(conn)
+	// defer hangup(conn)
+	c, _ := NewClient(conn)
 
-    c.InitClient()
+	c.InitClient()
 
-
-    c.SetMenu("start.mnu")
-    c.RunMenu()
-    c.conn.Close()
-    fmt.Printf("%s Disconnected\n", c.conn.RemoteAddr())
+	c.SetMenu("start.mnu")
+	c.RunMenu()
+	c.conn.Close()
+	fmt.Printf("%s Disconnected\n", c.conn.RemoteAddr())
 }
