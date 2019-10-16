@@ -3,7 +3,7 @@ package main
 // ConfigRec defines basic setup proeperties
 type ConfigRec struct {
 	BindIP     string `json:"bindIP"`
-	BindPort   int16  `json:"bindPort"`
+	BindPort   int    `json:"bindPort"`
 	SystemName string `json:"systemName"`
 	SysOp      string `json:"sysOp"`
 	StartMenu  string `json:"startMenu"`

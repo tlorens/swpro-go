@@ -32,7 +32,10 @@ func NewClient(c net.Conn) (*Client, error) {
 
 // InitClient initializes the terminal environment.
 func (c *Client) InitClient() {
-	c.rw.Write([]byte{cmdIAC, cmdWill, optEcho, cmdIAC, cmdWill, optSuppressGoAhead, cmdIAC, cmdWont, cmdLineMode, cmdIAC, cmdWill, optEcho})
+	c.rw.Write([]byte{cmdIAC, cmdDo, cmdLineMode})
+	c.rw.Write([]byte{cmdIAC, cmdSB, cmdLineMode, optEcho, 0, cmdIAC, cmdSE})
+	c.rw.Write([]byte{cmdIAC, cmdWill, optEcho})
+	// c.rw.Write([]byte{cmdIAC, cmdWill, optEcho, cmdIAC, cmdWill, optSuppressGoAhead, cmdIAC, cmdWont, cmdLineMode, cmdIAC, cmdWill, optEcho})
 	c.rw.Flush()
 	c.rw.Discard(5)
 	//c.rw.WriteString("\e[8;25;80t")

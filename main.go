@@ -13,12 +13,6 @@ import (
 )
 
 const (
-	CONN_HOST = "0.0.0.0"
-	CONN_TYPE = "tcp"
-	CONN_PORT = 9000
-)
-
-const (
 	CR = byte('\r')
 	LF = byte('\n')
 )
@@ -50,13 +44,13 @@ const (
 var config ConfigRec
 
 func main() {
-	config := loadConfig("config.json")
-	// ClrScr()
-	Writeln("-=] ShockWavE:PRO BBS ]=-")
+	ClrScr()
+	config := Init()
+	Writeln("|01-|09=|11] |15ShockWavE:PRO BBS |11[|09=|01-|07")
 	Writeln("System: " + config.SystemName)
 
 	// Command line argument -port
-	portPtr := flag.Int("port", CONN_PORT, "Port number")
+	portPtr := flag.Int("port", config.BindPort, "Port number")
 	flag.Parse()
 
 	// Only accept so many connections.
@@ -64,7 +58,7 @@ func main() {
 	runtime.GOMAXPROCS(maxConns)
 
 	// Listen for incoming connections.
-	listener, err := net.Listen(CONN_TYPE, CONN_HOST+":"+strconv.Itoa(*portPtr))
+	listener, err := net.Listen("tcp", config.BindIP+":"+strconv.Itoa(*portPtr))
 	if err != nil {
 		fmt.Println("Error: ", err.Error())
 		os.Exit(1)
@@ -73,7 +67,7 @@ func main() {
 	// Close the listener when the application closes.
 	defer listener.Close()
 
-	fmt.Printf("Listening on %s:%s (max: %d)\n", CONN_HOST, strconv.Itoa(*portPtr), maxConns)
+	fmt.Printf("Listening on %s:%s (max: %d)\n", config.BindIP, strconv.Itoa(*portPtr), maxConns)
 	for {
 		// Listen for an incoming connection.
 		conn, err := listener.Accept()
