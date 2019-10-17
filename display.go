@@ -61,8 +61,8 @@ func (c *Client) PrintFile(filename string) {
 	scanner := bufio.NewScanner(fh)
 	for scanner.Scan() {
 		line := scanner.Text()
-		i := strings.LastIndex(line, string(26))
-		log.Println(i)
+		// i := strings.LastIndex(line, string(26))
+		// log.Println(i)
 		c.MCIPrintLn(line)
 	}
 	c.NetWrite("\r\n")
@@ -75,6 +75,9 @@ func (c *Client) GetLine(maxLen int) string {
 	for ch != 13 {
 		ch = c.NetReadCh()
 		if len(tmp) <= maxLen {
+			if ch == 127 {
+				c.NetWrite(CursorLf(1))
+			}
 			tmp += string(ch)
 			c.NetWrite(string(ch))
 		}
