@@ -75,14 +75,21 @@ func (c *Client) GetLine(maxLen int) string {
 	for ch != 13 {
 		ch = c.NetReadCh()
 		if len(tmp) <= maxLen {
-			if ch == 127 {
+			switch {
+			case ch == 13:
+				break
+			case ch == 127 && len(tmp) > 0:
 				c.NetWrite(CursorLf(1))
+				c.NetWrite(" ")
+				c.NetWrite(CursorLf(1))
+				tmp = tmp[:len(tmp)-1]
+			case ch >= 32 && ch <= 126:
+				tmp += string(ch)
+				c.NetWrite(string(ch))
 			}
-			tmp += string(ch)
-			c.NetWrite(string(ch))
 		}
 	}
-	c.NetWrite("\n")
+	c.NetWrite("\r\n")
 	return strings.Trim(tmp, "\u0000\r\n")
 }
 

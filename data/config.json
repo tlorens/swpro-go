@@ -1,5 +1,5 @@
 {
-	"bindIP": "192.168.1.6",
+	"bindIP": "127.0.0.1",
 	"bindPort": 9000,
 	"systemName": "Cyberdyne Systems",
 	"sysOp": "iCE Breaker",

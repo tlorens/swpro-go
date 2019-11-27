@@ -55,14 +55,15 @@ func (c *Client) NetWrite(str string) {
 }
 
 func (c *Client) NetWriteln(str string) {
-	c.rw.WriteString(str + "\n\r")
+	c.rw.WriteString(str + "\r\n")
 	c.rw.Flush()
 }
 
 func (c *Client) NetReadCh() byte {
 	ch, err := c.rw.ReadByte()
 	if err != nil {
-		log.Println("Error:", err.Error())
+		log.Println("Error: ", err.Error())
+		log.Println("User hung up?")
 		c.conn.Close()
 		runtime.Goexit()
 	}
